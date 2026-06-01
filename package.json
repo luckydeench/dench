@@ -1,0 +1,32 @@
+{
+  "name": "dench",
+  "version": "0.1.0",
+  "description": "",
+  "homepage": "https://github.com/luckydeench/dench#readme",
+  "bugs": {
+    "url": "https://github.com/luckydeench/dench/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/luckydeench/dench.git"
+  },
+  "license": "MIT",
+  "author": "etanolfly98 <etanolfly98@gmail.com>",
+  "type": "module",
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "files": [
+    "dist",
+    "README.md"
+  ],
+  "scripts": {
+    "build": "tsup src/index.ts --format esm,cjs --dts",
+    "typecheck": "tsc --noEmit",
+    "prepublishOnly": "npm run typecheck && npm run build"
+  },
+  "devDependencies": {
+    "tsup": "^8.5.1",
+    "typescript": "^6.0.3"
+  }
+}
