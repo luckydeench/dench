@@ -26,16 +26,22 @@ const user = await api
 
 ## Purpose
 
-Dench keeps the native `fetch` model, but wraps repeated request setup in a
-chainable builder API.
+Dench keeps the native `fetch` model while improving the developer experience
+of writing HTTP requests with fetch.
 
 The main goals are:
 
 - Create a reusable API client from a base URL.
-- Build `GET`, `POST`, `PUT`, and `DELETE` requests with typed response helpers.
-- Add common fetch options through method chaining.
+- Build `GET`, `POST`, `PUT`, and `DELETE` requests with type support, in the
+  same spirit as existing fetch DX libraries such as Ky and axios.
+- Configure `RequestInit` options and common request patterns such as abort and
+  error handling through method chaining, while keeping those settings reusable.
 - Keep request execution explicit with terminal methods such as `toJson()` and
   `toResponse()`.
+- Reduce common fetch mistakes, such as URL typing mistakes and invalid option
+  values.
+- Improve DX by minimizing object literals and raw string configuration, using
+  types to guide request construction.
 
 ## Installation
 
@@ -208,4 +214,3 @@ npm run build
 
 The package is built with `tsup` and outputs both ESM and CommonJS builds in
 `dist`.
-
