@@ -85,7 +85,7 @@ export interface DenchCreateBuilder<T> extends DenchBuilder<T>, DenchRunner<T>{
     referrerPolicy : (policy : HTTPReferrerPolicy) => DenchCreateBuilder<T>,
 
     /**
-     * 에러 콜백이 추가됩니다. 
+     * 에러 콜백을 설정합니다. 
      * fetch 과정에서 에러가 발생 시 해당 콜백이 호출됩니다.
      */
     error: (callback: (error: unknown) => void) => DenchCreateBuilder<T>,
@@ -107,6 +107,16 @@ export interface DenchCreateBuilder<T> extends DenchBuilder<T>, DenchRunner<T>{
     sendBlob : () => DenchCreateBuilder<T>,
 
     /**
+     * URL의 슬래쉬 경계 부분을 정규화 합니다.
+     * 
+     * 1.  baseURL 끝의 슬래쉬를 제거하고 apiURL의 시작엔 최소 한개의 슬래쉬를 생성한다.
+     * 2.  baseURL과 apiURL에 슬래쉬가 중복 발생하는 모든 경우에 하나로 바꾼다.
+     * 
+     * @example1 http://example.com/ -> http://example.com
+     * @example2 http://example.com + //api// -> http://example.com + /api
+     * @example3 https:////example.com + //api/aa -> https://example.com + /api/aa
+     * 
+     * 만약 슬래시를 두 개 이상 사용하는 것이 의도라면 해당 함수를 사용하지 마세요
      * 
      * @returns 
      */
@@ -125,8 +135,9 @@ export interface DenchCreateBuilder<T> extends DenchBuilder<T>, DenchRunner<T>{
         * @example2 http://example.com + //api// -> http://example.com + /api
         * @example3 https:////example.com + //api/aa -> https://example.com + /api/aa
         * 
-        * 만약 슬래시를 두 개 이상 사용하는 것이 의도라면 해당 함수를 사용하지 마세요
-        * 또한 성능적인 소모가 존재하니 예측 불가능한 URL이 들어오는 경우에만 사용하세요
+        * tip : 만약 슬래시를 두 개 이상 사용하는 것이 의도라면 해당 함수를 사용하지 마세요
+        * 또한 성능적인 소모가 존재하니 예측 불가능한 URL이 들어오는 경우에 사용하고, 
+        * URL을 직접 눈으로 확인해서 관리하는 것을 권장합니다.
         * 
         * @returns 
         */
@@ -140,16 +151,77 @@ export interface DenchCreateBuilder<T> extends DenchBuilder<T>, DenchRunner<T>{
  * @interface DenchGetBuilder
  */
 export interface DenchGetBuilder<T> extends DenchBuilder<T>, DenchRunner<T>{
+    /**
+     * 요청을 중단할 수 있는 AbortController를 설정합니다.
+     * @param controller AbortController 인스턴스
+     * @returns DenchGetBuilder<T>
+     */
     abort: (controller : AbortController) => DenchGetBuilder<T>,
+
+    /**
+     * 인증 토큰 설정을 추가합니다.
+     * @config { Authorization : `Bearer ${token}`}
+     */
     auth: (token:string) => DenchGetBuilder<T>,
+
+    /**
+     * 요청 timeout 설정을 추가합니다.
+     * @param ms ms 단위 timeout 시간
+     */
     timeout : (ms : number) => DenchGetBuilder<T>,
+
+    /**
+     * credentials 설정을 추가합니다.
+     * @config { credentials : credentials }
+     */
     credentials: (credentials : HTTPCredentials) => DenchGetBuilder<T>,
+
+    /**
+     * fetch의 cache 설정을 추가합니다.
+     * @config { cache : cache }
+     */
     cache : (cache : HTTPCache) => DenchGetBuilder<T>,
+
+    /**
+     * mode 설정을 추가합니다.
+     * @config { mode : mode }
+     */
     mode : (mode : HTTPMode) => DenchGetBuilder<T>,
+
+    /**
+     * redirect 설정을 추가합니다.
+     * @config { redirect : redirect }
+     */
     redirect : (redirect : HTTPRedirect) => DenchGetBuilder<T>,
+
+    /**
+     * referrerPolicy 설정을 추가합니다.
+     * @config { referrerPolicy : policy }
+     */
+    referrerPolicy: (policy: HTTPReferrerPolicy) => DenchGetBuilder<T>,
+
+    /**
+     * 에러 콜백을 설정합니다. 
+     * fetch 과정에서 에러가 발생 시 해당 콜백이 호출됩니다.
+     */
     error: (callback: (error: unknown) => void) => DenchGetBuilder<T>,
+    
+    /**
+     * URL의 슬래쉬 경계 부분을 정규화 합니다.
+     * 
+     * 1.  baseURL 끝의 슬래쉬를 제거하고 apiURL의 시작엔 최소 한개의 슬래쉬를 생성한다.
+     * 2.  baseURL과 apiURL에 슬래쉬가 중복 발생하는 모든 경우에 하나로 바꾼다.
+     * 
+     * @example1 http://example.com/ -> http://example.com
+     * @example2 http://example.com + //api// -> http://example.com + /api
+     * @example3 https:////example.com + //api/aa -> https://example.com + /api/aa
+     * 
+     * 만약 슬래시를 두 개 이상 사용하는 것이 의도라면 해당 함수를 사용하지 마세요
+     * 
+     * @returns 
+     */
     boundaryNormalize: () => DenchGetBuilder<T>,
-    referrerPolicy: (policy : HTTPReferrerPolicy) => DenchGetBuilder<T>,
+
     /**
      * URL을 더 엄격하게 정규화 합니다.
      * 
@@ -188,9 +260,31 @@ export interface DenchInterface{
     delete : <T>(api: string) => DenchGetBuilder<T>
 }
 
-
+/**
+ * Dench 요청 실행 인터페이스
+ * 
+ * @interface DenchRunner
+ */
 export interface DenchRunner<T> {
+
+    /**
+     * fetch 요청을 실행하고 Response 객체를 반환합니다.
+     * 
+     * @returns Promise<Response>
+     */
     toResponse: () => Promise<Response>,
+
+    /**
+     * fetch 요청을 실행하고 응답을 JSON으로 파싱하여 반환합니다.
+     * 
+     * @returns Promise<T>
+     */
     toJson: () => Promise<T>,
+
+    /**
+     * fetch 요청을 실행하고 응답을 FormData로 파싱하여 반환합니다.
+     * 
+     * @returns Promise<FormData>
+     */
     toFormData: () => Promise<FormData>
 }
