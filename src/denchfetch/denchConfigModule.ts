@@ -1,5 +1,5 @@
 import type { DenchConfig } from "../types/denchConfig"
-import type { HTTPCache, HTTPCredentials, HTTPMode, HTTPRedirect, HTTPReferrerPolicy } from "../types/denchEnum"
+import type { HTTPCache, HTTPCredentials, HTTPMode, HTTPRedirect, HTTPReferrerPolicy } from "../types/denchHTTPEnum"
 
 /**
  * timeout 설정 

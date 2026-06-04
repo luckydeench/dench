@@ -1,6 +1,6 @@
 import type { DenchRunner } from "./denchRunner";
 import type { DenchBaseConfig } from "./denchConfig";
-import type { HTTPCache, HTTPCredentials, HTTPMode, HTTPRedirect, HTTPReferrerPolicy } from "./denchEnum";
+import type { HTTPCache, HTTPCredentials, HTTPMode, HTTPRedirect, HTTPReferrerPolicy } from "./denchHTTPEnum";
 
 export interface DenchBuilder<T, R extends DenchBuilder<T, R>>{
     config : DenchBaseConfig,

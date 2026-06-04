@@ -1,4 +1,4 @@
-import type { HTTPCache, HTTPCredentials, HTTPMode, HTTPRedirect, HTTPReferrerPolicy } from "./denchEnum"
+import type { HTTPCache, HTTPCredentials, HTTPMode, HTTPRedirect, HTTPReferrerPolicy } from "./denchHTTPEnum"
 
 interface DenchOptions extends RequestInit{
     method: string,

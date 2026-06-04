@@ -9,7 +9,7 @@ import {
     errorConfig, } from "./denchConfigModule"
 import { runfetch, toFormData, toJson } from "./denchRunner";
 import { boundaryNormalize, hardNormalize } from "./denchUtils";
-import type { HTTPCache, HTTPCredentials, HTTPMode, HTTPRedirect, HTTPReferrerPolicy } from "../types/denchEnum";
+import type { HTTPCache, HTTPCredentials, HTTPMode, HTTPRedirect, HTTPReferrerPolicy } from "../types/denchHTTPEnum";
 import type { DenchConfig, DenchInterface } from "../types/denchRunner";
 import type { DenchCreateBuilder, DenchGetBuilder } from "../types/denchBuilder";
 
