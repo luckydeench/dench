@@ -13,7 +13,7 @@ import type { HTTPCache, HTTPCredentials, HTTPMode, HTTPRedirect, HTTPReferrerPo
 import type { DenchCreateBuilder, DenchGetBuilder } from "../types/denchBuilder";
 import type { DenchConfig } from "../types/denchConfig";
 import type { DenchAuthType } from "../types/denchEnum";
-import type { DenchInterface, DenchURL } from "../types/dench";
+import type { DenchInterface, DenchHTTPURL } from "../types/dench";
 
 
 
@@ -100,11 +100,18 @@ export const DenchInstancePreset : Partial<Record<string, DenchInterface>> = {}
 /**
  * Dench 빌더 함수
  * 
- * @param baseURL baseURL 
+ * @param baseURL baseURL
+ * 허용 URL은 다음과 같습니다.
+ * - http://
+ * - https://
+ * - file://
+ * - ftp://
+ * - ws://
+ * - wss://
  * @param label 빌더 레이블
  * @returns 
  */
-export function dench<T>(baseURL: DenchURL, label? :string) : DenchInterface{
+export function dench<T>(baseURL: DenchHTTPURL, label? :string) : DenchInterface{
 
     if(label) DenchInstancePreset[label] = DenchInstancePreset[label] || dench(baseURL);
 

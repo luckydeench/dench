@@ -5,4 +5,4 @@ export type {  DenchRunner }  from './types/denchRunner';
 export type { DenchBuilder, DenchCreateBuilder, DenchGetBuilder } from './types/denchBuilder';
 export type { DenchConfig } from './types/denchConfig';
 export type { DenchAuthType} from './types/denchEnum';
-export type { DenchInterface, DenchURL } from './types/dench';
+export type { DenchInterface, DenchHTTPURL } from './types/dench';

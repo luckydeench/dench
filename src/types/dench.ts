@@ -10,7 +10,7 @@ import type { DenchCreateBuilder, DenchGetBuilder } from "./denchBuilder"
  *  @function delete - DELETE 요청을 위한 빌더 반환
  */
 export interface DenchInterface{
-    baseURL : string,
+    baseURL : DenchHTTPURL,
     get : <T>(api:string) => DenchGetBuilder<T>
     post : <T>(api: string, data : any) => DenchCreateBuilder<T>
     put : <T>(api: string, data : any) => DenchCreateBuilder<T>
@@ -19,4 +19,10 @@ export interface DenchInterface{
 
 
 // url 타입을 http:// 또는 https://로 제한하는 게 가능하다.
-export type DenchURL = `http://${string}` | `https://${string}`
+export type DenchHTTPURL = 
+`http://${string}` 
+| `https://${string}` 
+| `file://${string}` 
+| `ftp://${string}` 
+| `ws://${string}` 
+| `wss://${string}`
