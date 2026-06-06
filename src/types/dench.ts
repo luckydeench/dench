@@ -17,3 +17,6 @@ export interface DenchInterface{
     delete : <T>(api: string) => DenchGetBuilder<T>
 }
 
+
+// url 타입을 http:// 또는 https://로 제한하는 게 가능하다.
+export type DenchURL = `http://${string}` | `https://${string}`

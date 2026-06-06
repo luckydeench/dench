@@ -13,7 +13,7 @@ import type { HTTPCache, HTTPCredentials, HTTPMode, HTTPRedirect, HTTPReferrerPo
 import type { DenchCreateBuilder, DenchGetBuilder } from "../types/denchBuilder";
 import type { DenchConfig } from "../types/denchConfig";
 import type { DenchAuthType } from "../types/denchEnum";
-import type { DenchInterface } from "../types/dench";
+import type { DenchInterface, DenchURL } from "../types/dench";
 
 
 
@@ -95,9 +95,6 @@ const createPostBuilder = <T>(config: DenchConfig): DenchCreateBuilder<T> => ({
 
 export const DenchInstancePreset : Partial<Record<string, DenchInterface>> = {}
 
-
-// url 타입을 http:// 또는 https://로 제한하는 게 가능하다.
-type DenchURL = `http://${string}` | `https://${string}`
 
 
 /**
