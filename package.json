@@ -21,7 +21,7 @@
     "README.md"
   ],
   "scripts": {
-    "test-start" : "tsx src/index.ts",
+    "test-start" : "tsx src/test.ts",
     "build": "tsup src/index.ts --format esm,cjs --dts",
     "typecheck": "tsc --noEmit",
     "prepublishOnly": "npm run typecheck && npm run build",
