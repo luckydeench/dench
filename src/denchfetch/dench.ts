@@ -58,8 +58,17 @@ const createGetBuilder = <T>(config: DenchConfig): DenchGetBuilder<T> => ({
         }
         return createGetBuilder<T>(newConfig);
     },
-    copy : () => createGetBuilder<T>(config)
-
+    copy : () => {
+        const copiedConfig : DenchConfig = {
+            ...config,
+            options : {
+                ...config.options,
+                headers : config.options.headers ? {...config.options.headers} : undefined,
+                body : config.options.body
+            }
+        }
+        return createGetBuilder<T>(copiedConfig)
+    }
 
 })
 
@@ -100,7 +109,17 @@ const createPostBuilder = <T>(config: DenchConfig): DenchCreateBuilder<T> => ({
         config.URLNormalize = normalizeMode;
         return createPostBuilder<T>(config);
     },
-    copy : () => createPostBuilder<T>(config)
+    copy: () => {
+        const copiedConfig: DenchConfig = {
+            ...config,
+            options: {
+                ...config.options,
+                headers: config.options.headers ? { ...config.options.headers } : undefined,
+                body: config.options.body
+            }
+        }
+        return createPostBuilder<T>(copiedConfig)
+    }
 
 })
 
