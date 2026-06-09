@@ -13,8 +13,8 @@ import { runfetch, toFormData, toJson } from "./denchRunner";
 import { boundaryNormalize, hardNormalize } from "./denchUtils";
 import type { HTTPCache, HTTPCredentials, HTTPMode, HTTPRedirect, HTTPReferrerPolicy } from "../types/denchHTTPEnum";
 import type { DenchCreateBuilder, DenchGetBuilder } from "../types/denchBuilder";
-import type { DenchConfig } from "../types/denchConfig";
-import type { DenchAuthType } from "../types/denchEnum";
+import { type DenchConfig } from "../types/denchConfig";
+import { DenchURLNormalizeMode, type DenchAuthType } from "../types/denchEnum";
 import type { DenchInterface, DenchHTTPURL } from "../types/dench";
 
 
@@ -39,21 +39,23 @@ const createGetBuilder = <T>(config: DenchConfig): DenchGetBuilder<T> => ({
     redirect: (redirect : HTTPRedirect) => createGetBuilder<T>(redirectConfig(config, redirect)),
     api : <P = T>(api : string) => createGetBuilder<P>({...config, api}),
     boundaryNormalize: () => {
-        const { baseURL, apiURL } = boundaryNormalize(config.baseURL, config.api);
-
         const newConfig = {
             ...config,
-            baseURL,
-            api: apiURL
+            URLNormalize : DenchURLNormalizeMode.BOUNDARY,
         }
         return createGetBuilder<T>(newConfig);
     },
     hardNormalize: () => {
-        const { baseURL, apiURL } = hardNormalize(config.baseURL, config.api);
         const newConfig = {
             ...config,
-            baseURL,
-            api: apiURL
+            URLNormalize : DenchURLNormalizeMode.HARD,
+        }
+        return createGetBuilder<T>(newConfig);
+    },
+    URLNormalize: (normalizeMode: DenchURLNormalizeMode = DenchURLNormalizeMode.BOUNDARY) => {
+        const newConfig = {
+            ...config,
+            URLNormalize: normalizeMode
         }
         return createGetBuilder<T>(newConfig);
     },
@@ -87,15 +89,16 @@ const createPostBuilder = <T>(config: DenchConfig): DenchCreateBuilder<T> => ({
     redirect: (redirect : HTTPRedirect) => createPostBuilder<T>(redirectConfig(config, redirect)),
     api : <P=T>(api : string) => createPostBuilder<P>({...config, api}),
     boundaryNormalize: () => {
-        const { baseURL, apiURL } = boundaryNormalize(config.baseURL, config.api);
-        config.baseURL = baseURL;
-        config.api = apiURL;
+        config.URLNormalize = DenchURLNormalizeMode.BOUNDARY;
         return createPostBuilder<T>(config);
     },
     hardNormalize: () => {
-        const { baseURL, apiURL } = hardNormalize(config.baseURL, config.api);
-        config.baseURL = baseURL;
-        config.api = apiURL;
+        config.URLNormalize = DenchURLNormalizeMode.HARD;
+        return createPostBuilder<T>(config);
+    },
+
+    URLNormalize: (normalizeMode: DenchURLNormalizeMode = DenchURLNormalizeMode.BOUNDARY) => {
+        config.URLNormalize = normalizeMode;
         return createPostBuilder<T>(config);
     },
     copy : () => createPostBuilder<T>(config)
@@ -131,6 +134,7 @@ export function dench<T>(baseURL: DenchHTTPURL, label? :string) : DenchInterface
         const config : DenchConfig = {
             baseURL,
             api,
+            URLNormalize : DenchURLNormalizeMode.NONE,
             options : {
                 method : 'GET',
             }
@@ -144,6 +148,7 @@ export function dench<T>(baseURL: DenchHTTPURL, label? :string) : DenchInterface
         const baseConfig : DenchConfig = {
             baseURL,
             api,
+            URLNormalize : DenchURLNormalizeMode.NONE,
             options : {
                 method : 'POST',
             }
@@ -157,6 +162,7 @@ export function dench<T>(baseURL: DenchHTTPURL, label? :string) : DenchInterface
         const baseConfig: DenchConfig = {
             baseURL,
             api,
+            URLNormalize : DenchURLNormalizeMode.NONE,
             options: {
                 method: 'PUT',
             }
@@ -170,6 +176,7 @@ export function dench<T>(baseURL: DenchHTTPURL, label? :string) : DenchInterface
         const baseConfig : DenchConfig = {
             baseURL,
             api,
+            URLNormalize : DenchURLNormalizeMode.NONE,
             options : {
                 method : 'DELETE',
             }

@@ -1,7 +1,7 @@
 import type { DenchRunner } from "./denchRunner";
 import type { DenchBaseConfig } from "./denchConfig";
 import type { HTTPCache, HTTPCredentials, HTTPMode, HTTPRedirect, HTTPReferrerPolicy } from "./denchHTTPEnum";
-import type { DenchAuthType } from "./denchEnum";
+import type { DenchAuthType, DenchURLNormalizeMode } from "./denchEnum";
 import type { DenchURLSearchParams } from "./dench";
 
 export interface DenchBuildUtils<T, R extends DenchBuilder<T, R>>{
@@ -87,12 +87,6 @@ export interface DenchBuilder<T, R extends DenchBuilder<T, R>> extends DenchBuil
      */
     error: (callback: (error: unknown) => void) => R,
 
-
-    /**
-     * api URL을 설정합니다.
-     */
-    api: <P = T>(api: string) => R,
-
     /**
      * URL의 슬래쉬 경계 부분을 정규화 합니다.
      * 
@@ -129,6 +123,20 @@ export interface DenchBuilder<T, R extends DenchBuilder<T, R>> extends DenchBuil
     * @returns 
     */
     hardNormalize: () => R
+
+
+    /**
+     * URL 정규화 모드를 설정합니다.
+     * 
+     * - NONE : URL 정규화를 하지 않습니다.
+     * - BOUNDARY : 슬래쉬 경계 부분만 정규화 합니다. (기본값)
+     * - HARD : 슬래쉬 경계 부분과 apiURL 끝의 슬래쉬를 제거하는 등 더 엄격하게 정규화 합니다.
+     * 
+     * @param normalizeMode 
+     * @returns 
+     */
+
+    URLNormalize : (normalizeMode : DenchURLNormalizeMode)=> R
 
 }
 
@@ -186,6 +194,13 @@ export interface DenchCreateBuilder<T> extends DenchBuilder<T, DenchCreateBuilde
      */
     sendRaw : (data? : BodyInit) => DenchCreateBuilder<T>
 
+
+    /**
+     * api URL을 설정합니다.
+     */
+    api: <P = T>(api: string) => DenchCreateBuilder<P>,
+
+
 }
 
 
@@ -196,5 +211,10 @@ export interface DenchCreateBuilder<T> extends DenchBuilder<T, DenchCreateBuilde
  */
 export interface DenchGetBuilder<T> extends DenchBuilder<T, DenchGetBuilder<T>>, DenchRunner<T>{
 
+
+    /**
+     * api URL을 설정합니다.
+     */
+    api: <P = T>(api: string) => DenchGetBuilder<P>,
 
 }

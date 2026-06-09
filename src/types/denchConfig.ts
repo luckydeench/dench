@@ -1,3 +1,5 @@
+
+import type { DenchURLNormalizeMode } from "./denchEnum"
 import type { HTTPCache, HTTPCredentials, HTTPMode, HTTPRedirect, HTTPReferrerPolicy } from "./denchHTTPEnum"
 
 interface DenchOptions extends RequestInit{
@@ -17,6 +19,7 @@ export interface DenchBaseConfig{
     baseURL : string,
     api : string,
     errorcallback? : (error : unknown) => void,
+    URLNormalize : DenchURLNormalizeMode, 
     options : DenchOptions
 }
 

@@ -24,3 +24,9 @@ export enum DenchAuthType{
     TOKEN = 'Token',
     HMAC = 'HMAC',
 }
+
+export enum DenchURLNormalizeMode {
+    NONE,
+    BOUNDARY,
+    HARD
+}
